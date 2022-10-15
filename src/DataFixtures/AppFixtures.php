@@ -24,9 +24,11 @@ class AppFixtures extends Fixture
         $comment->setText('hello');
         $comment->setEmail('kyosuke@google.com');
         $comment->setCreatedAt(new \DateTimeImmutable());
-        $comment->setConference($conference);
+#        $comment->setConference($conference);
+        $conference->addComment($comment);
 
-        $manager->merge($comment);
+#        $manager->merge($comment);
+        $manager->persist($comment);
         $manager->flush();
     }
 }
