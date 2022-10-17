@@ -44,24 +44,28 @@ class AppFixtures extends Fixture
         $manager->persist($conference);
         $manager->flush();
 
-        $comment = new Comment();
-        $comment->setAuthor('Jhon');
-        $comment->setText('lorem ipsum');
-        $comment->setEmail('jhon@google.com');
-        $comment->setCreatedAt(new \DateTimeImmutable());
-        $conference->addComment($comment);
+        $this->storeComments($manager, $conference, [
+            ['Alis', 'Hi'],
+            ['Bob', 'How are you?'],
+            ['Alis', 'Fine thank you, and you?'],
+            ['Bob', 'Grate!'],
+            ['Cathy', 'Wow!'],
+        ]);
+    }
 
-        $manager->persist($comment);
-        $manager->flush();
+    // [auther, comemnt]
+    public function storeComments($manager, $conference, $dataList = [])
+    {
+        foreach ($dataList as $data) {
+            $comment = new Comment();
+            $comment->setAuthor($data[0]);
+            $comment->setText($data[1]);
+            $comment->setEmail("{$data[0]}@google.com");
+            $comment->setCreatedAt(new \DateTimeImmutable());
+            $conference->addComment($comment);
 
-        $comment = new Comment();
-        $comment->setAuthor('Smith');
-        $comment->setText('foobarctjm3q94ugecgjhuher;ahmcgaowcerchma8wethgae;cngyaw8ot;fqacw48ntchertusewhnctawoinwfueichngawoiuc;gocn;aocmy awerctg[wna;ohgwcnhawcngcwnichcwcfghnuanhgciocnerionccawhcgfhacwhgiocna8ncgw8cngaw8chng8wnacuincucga8wn8gor');
-        $comment->setEmail('smith@google.com');
-        $comment->setCreatedAt(new \DateTimeImmutable());
-        $conference->addComment($comment);
-
-        $manager->persist($comment);
-        $manager->flush();
+            $manager->persist($comment);
+            $manager->flush();
+        }
     }
 }
