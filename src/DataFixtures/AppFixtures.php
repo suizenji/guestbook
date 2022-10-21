@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
         $comment->setAuthor('Kyosuke');
         $comment->setText('hello');
         $comment->setEmail('kyosuke@google.com');
-        $comment->setCreatedAt(new \DateTimeImmutable());
+#        $comment->setCreatedAt(new \DateTimeImmutable());
 #        $comment->setConference($conference);
         $conference->addComment($comment);
 
@@ -61,7 +61,7 @@ class AppFixtures extends Fixture
             $comment->setAuthor($data[0]);
             $comment->setText($data[1]);
             $comment->setEmail("{$data[0]}@google.com");
-            $comment->setCreatedAt(new \DateTimeImmutable());
+#            $comment->setCreatedAt(new \DateTimeImmutable());
             $conference->addComment($comment);
 
             $manager->persist($comment);
