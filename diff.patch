@@ -1,48 +1,38 @@
---- a/src/Controller/ConferenceController.php
-+++ b/src/Controller/ConferenceController.php
-@@ -28,7 +28,7 @@ class ConferenceController extends AbstractController
-         ]));
-     }
+--- a/src/Form/CommentFormType.php
++++ b/src/Form/CommentFormType.php
+@@ -4,20 +4,31 @@ namespace App\Form;
 
--    #[Route('/conference/{id}', name: 'conference')]
-+    #[Route('/conference/{slug}', name: 'conference')]
-     public function show(Request $request, Conference $conference, CommentRepository $commentRepository): Response
+ use App\Entity\Comment;
+ use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\Extension\Core\Type\EmailType;
++use Symfony\Component\Form\Extension\Core\Type\FileType;
++use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\OptionsResolver\OptionsResolver;
++use Symfony\Component\Validator\Constraints\Image;
+
+ class CommentFormType extends AbstractType
+ {
+     public function buildForm(FormBuilderInterface $builder, array $options): void
      {
-         $offset = max(0, $request->query->getInt('offset', 0));
---- a/templates/base.html.twig
-+++ b/templates/base.html.twig
-@@ -18,7 +18,7 @@
-             <h1><a href="{{ path('homepage') }}">Guestbook</a></h1>
-             <ul>
-             {% for conference in conferences %}
--                <li><a href="{{ path('conference', { id: conference.id }) }}">{{ conference }}</a></li>
-+                <li><a href="{{ path('conference', { slug: conference.slug }) }}">{{ conference }}</a></li>
-             {% endfor %}
-             </ul>
-             <hr />
---- a/templates/conference/index.html.twig
-+++ b/templates/conference/index.html.twig
-@@ -8,7 +8,7 @@
-     {% for conference in conferences %}
-         <h4>{{ conference }}</h4>
-         <p>
--            <a href="{{ path('conference', { id: conference.id }) }}">View</a>
-+            <a href="{{ path('conference', { slug: conference.slug }) }}">View</a>
-         </p>
-     {% endfor %}
- {% endblock %}
---- a/templates/conference/show.html.twig
-+++ b/templates/conference/show.html.twig
-@@ -22,10 +22,10 @@
-         {% endfor %}
-
-         {% if previous >= 0 %}
--            <a href="{{ path('conference', { id: conference.id, offset: previous }) }}">Previous</a>
-+            <a href="{{ path('conference', { slug: conference.slug, offset: previous }) }}">Previous</a>
-         {% endif %}
-         {% if next < comments|length %}
--            <a href="{{ path('conference', { id: conference.id, offset: next }) }}">Next</a>
-+            <a href="{{ path('conference', { slug: conference.slug, offset: next }) }}">Next</a>
-         {% endif %}
-     {% else %}
-         <div>No comments have been posted yet for this conference.</div>
+         $builder
+-            ->add('author')
++            ->add('author', null, [
++                'label' => 'Your name',
++            ])
+             ->add('text')
+-            ->add('email')
+-            ->add('createdAt')
+-            ->add('photoFilename')
+-            ->add('conference')
++            ->add('email', EmailType::class)
++            ->add('photo', FileType::class, [
++                'required' => false,
++                'mapped' => false,
++                'constraints' => [
++                    new Image(['maxSize' => '1024k'])
++                ],
++            ])
++            ->add('submit', SubmitType::class)
+         ;
+     }
