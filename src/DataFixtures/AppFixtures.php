@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Admin;
 use App\Entity\Comment;
 use App\Entity\Conference;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -32,6 +33,7 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         $this->storeNewYork2021($manager);
+        $this->storeAdmin($manager);
     }
 
     private function storeNewYork2021($manager)
@@ -67,5 +69,16 @@ class AppFixtures extends Fixture
             $manager->persist($comment);
             $manager->flush();
         }
+    }
+
+    private function storeAdmin($manager)
+    {
+        $admin = new Admin();
+        $admin->setUsername('admin');
+        $admin->setPassword('$2y$13$lJ.kJVwxCdIKqau/Ym/gZebTP6vCoJVDXc6fAHvtYcjdmNhJbHcHy');
+        $admin->setRoles(['ROLE_ADMIN']);
+
+        $manager->persist($admin);
+        $manager->flush();
     }
 }
