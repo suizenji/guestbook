@@ -7,78 +7,52 @@ use App\Entity\Comment;
 use App\Entity\Conference;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 class AppFixtures extends Fixture
 {
+    private $passwordHasherFactory;
+
+    public function __construct(PasswordHasherFactoryInterface $encoderFactory)
+    {
+        $this->passwordHasherFactory = $encoderFactory;
+    }
+
     public function load(ObjectManager $manager): void
     {
-        $conference = new Conference();
-        $conference->setCity('Washinton');
-        $conference->setYear('2020');
-        $conference->setIsInternational(false);
+        $amsterdam = new Conference();
+        $amsterdam->setCity('Amsterdam');
+        $amsterdam->setYear('2019');
+        $amsterdam->setIsInternational(true);
+        $manager->persist($amsterdam);
 
-        $manager->persist($conference);
-        $manager->flush();
+        $paris = new Conference();
+        $paris->setCity('Paris');
+        $paris->setYear('2020');
+        $paris->setIsInternational(false);
+        $manager->persist($paris);
 
-        $comment = new Comment();
-        $comment->setAuthor('Kyosuke');
-        $comment->setText('hello');
-        $comment->setEmail('kyosuke@google.com');
-#        $comment->setCreatedAt(new \DateTimeImmutable());
-#        $comment->setConference($conference);
-        $conference->addComment($comment);
+        $comment1 = new Comment();
+        $comment1->setConference($amsterdam);
+        $comment1->setAuthor('Fabien');
+        $comment1->setEmail('fabien@example.com');
+        $comment1->setText('This was a great conference.');
+        // $comment1->setState('published');
+        $manager->persist($comment1);
 
-#        $manager->merge($comment);
-        $manager->persist($comment);
-        $manager->flush();
+        $comment2 = new Comment();
+        $comment2->setConference($amsterdam);
+        $comment2->setAuthor('Lucas');
+        $comment2->setEmail('lucas@example.com');
+        $comment2->setText('I think this one is going to be moderated.');
+        $manager->persist($comment2);
 
-        $this->storeNewYork2021($manager);
-        $this->storeAdmin($manager);
-    }
-
-    private function storeNewYork2021($manager)
-    {
-        $conference = new Conference();
-        $conference->setCity('NewYork');
-        $conference->setYear('2021');
-        $conference->setIsInternational(true);
-
-        $manager->persist($conference);
-        $manager->flush();
-
-        $this->storeComments($manager, $conference, [
-            ['Alis', 'Hi'],
-            ['Bob', 'How are you?'],
-            ['Alis', 'Fine thank you, and you?'],
-            ['Bob', 'Grate!'],
-            ['Cathy', 'Wow!'],
-        ]);
-    }
-
-    // [auther, comemnt]
-    public function storeComments($manager, $conference, $dataList = [])
-    {
-        foreach ($dataList as $data) {
-            $comment = new Comment();
-            $comment->setAuthor($data[0]);
-            $comment->setText($data[1]);
-            $comment->setEmail("{$data[0]}@google.com");
-#            $comment->setCreatedAt(new \DateTimeImmutable());
-            $conference->addComment($comment);
-
-            $manager->persist($comment);
-            $manager->flush();
-        }
-    }
-
-    private function storeAdmin($manager)
-    {
         $admin = new Admin();
-        $admin->setUsername('admin');
-        $admin->setPassword('$2y$13$lJ.kJVwxCdIKqau/Ym/gZebTP6vCoJVDXc6fAHvtYcjdmNhJbHcHy');
         $admin->setRoles(['ROLE_ADMIN']);
-
+        $admin->setUsername('admin');
+        $admin->setPassword($this->passwordHasherFactory->getPasswordHasher(Admin::class)->hash('admin', null));
         $manager->persist($admin);
+
         $manager->flush();
     }
 }
