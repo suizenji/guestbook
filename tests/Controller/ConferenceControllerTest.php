@@ -39,11 +39,12 @@ class ConferenceControllerTest extends WebTestCase
         $client->followRedirect();
         $this->assertSelectorExists('div:contains("There are 2 comments")');
     }
+    */
 
     public function testConferencePage()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/en/');
+        $crawler = $client->request('GET', '/');
 
         $this->assertCount(2, $crawler->filter('h4'));
 
@@ -54,5 +55,4 @@ class ConferenceControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h2', 'Amsterdam 2019');
         $this->assertSelectorExists('div:contains("There is one comment")');
     }
-    */
 }
