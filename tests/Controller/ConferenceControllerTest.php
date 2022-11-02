@@ -43,16 +43,24 @@ class ConferenceControllerTest extends WebTestCase
 
     public function testConferencePage()
     {
+        /** \Symfony\Bundle\FrameworkBundle\KernelBrowser $client */
         $client = static::createClient();
+
+        /** \Symfony\Component\DomCrawler\Crawler $crawler */
         $crawler = $client->request('GET', '/');
 
         $this->assertCount(2, $crawler->filter('h4'));
 
         $client->clickLink('View');
 
+#        $response = $client->getResponse();
+#        var_dump($response->getContent());
+#        file_put_contents('index.html', $response->getContent());
+#        return;
+
         $this->assertPageTitleContains('Amsterdam');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h2', 'Amsterdam 2019');
-        $this->assertSelectorExists('div:contains("There is one comment")');
+        $this->assertSelectorExists('div:contains("There are 2 comment")');
     }
 }
