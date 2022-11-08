@@ -12,7 +12,6 @@ test: drivers
 	symfony php bin/phpunit tests
 
 drivers: drivers/chromedriver drivers/geckodriver
-.PHONY: drivers
 
 drivers/chromedriver:
 	./vendor/bin/bdi driver:chromedriver drivers
