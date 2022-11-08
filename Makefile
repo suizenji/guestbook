@@ -8,6 +8,15 @@ tests:
 	symfony php bin/phpunit $@
 .PHONY: tests
 
+drivers: drivers/chromedriver drivers/geckodriver
+.PHONY: drivers
+
+drivers/chromedriver:
+	./vendor/bin/bdi driver:chromedriver drivers
+
+drivers/geckodriver:
+	./vendor/bin/bdi driver:geckodriver drivers
+
 server:
 	sudo docker-compose up -d
 	symfony serve -d
