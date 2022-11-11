@@ -31,7 +31,7 @@ class ConferenceControllerTest extends WebTestCase
 
         // simulate comment validation
         $comment = self::getContainer()->get(CommentRepository::class)->findOneByEmail($email);
-        //        $comment->setState('published');
+        $comment->setState('published');
         self::getContainer()->get(EntityManagerInterface::class)->flush();
 
         $client->followRedirect();

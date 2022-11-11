@@ -11,6 +11,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Comment
 {
+    public const STATE_SUBMITTED = 'submitted';
+    public const STATE_SPAM = 'spam';
+    public const STATE_PUBLISHED = 'published';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -38,6 +42,9 @@ class Comment
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoFilename = null;
+
+    #[ORM\Column(length: 255, options: ['default' => self::STATE_SUBMITTED])]
+    private ?string $state = self::STATE_SUBMITTED;
 
     public function __toString(): string
     {
@@ -123,6 +130,18 @@ class Comment
     public function setPhotoFilename(?string $photoFilename): self
     {
         $this->photoFilename = $photoFilename;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): self
+    {
+        $this->state = $state;
 
         return $this;
     }
