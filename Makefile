@@ -1,12 +1,13 @@
 SHELL := /bin/bash
+APP_ENV := test
 
 all: db test
 
 db:
-	symfony console doctrine:database:drop --force --env=test || true
-	symfony console doctrine:database:create --env=test
-	symfony console doctrine:migrations:migrate -n --env=test
-	symfony console doctrine:fixtures:load -n --env=test
+	symfony console doctrine:database:drop --force --env=$(APP_ENV) || true
+	symfony console doctrine:database:create --env=$(APP_ENV)
+	symfony console doctrine:migrations:migrate -n --env=$(APP_ENV)
+	symfony console doctrine:fixtures:load -n --env=$(APP_ENV)
 
 test: drivers
 	symfony php bin/phpunit tests
