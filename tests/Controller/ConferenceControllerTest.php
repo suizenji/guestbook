@@ -34,8 +34,12 @@ class ConferenceControllerTest extends WebTestCase
         $comment->setState('published');
         self::getContainer()->get(EntityManagerInterface::class)->flush();
 
-        $client->followRedirect();
-        $this->assertSelectorExists('div:contains("There are 3 comments")');
+        /** \Symfony\Component\DomCrawler\Crawler */
+        $crawler = $client->followRedirect();
+
+#        file_put_contents('index.html', $crawler->html());
+
+        $this->assertSelectorExists('div:contains("There are 2 comments")');
     }
 
     public function testConferencePage()
@@ -45,11 +49,12 @@ class ConferenceControllerTest extends WebTestCase
 
         $this->assertCount(2, $crawler->filter('h4'));
 
-        $client->clickLink('View');
+        $crawler = $client->clickLink('View');
+        file_put_contents('index.html', $crawler->html());
 
         $this->assertPageTitleContains('Amsterdam');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h2', 'Amsterdam 2019');
-        $this->assertSelectorExists('div:contains("There are 2 comments")');
+        $this->assertSelectorExists('div:contains("There are 1 comments")');
     }
 }
