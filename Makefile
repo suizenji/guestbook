@@ -24,3 +24,7 @@ server:
 	sudo docker-compose up -d
 	symfony serve -d
 	symfony run -d --watch=config,src,templates,vendor symfony console messenger:consume async -vv
+
+down:
+	sudo docker-compose stop
+	symfony local:server:stop
