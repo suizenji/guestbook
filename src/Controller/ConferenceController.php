@@ -9,12 +9,10 @@ use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
@@ -31,16 +29,7 @@ class ConferenceController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(
         ConferenceRepository $conferenceRepository,
-        MailerInterface $mailer,
     ): Response {
-        $mailer->send((new NotificationEmail())
-                ->subject('New comment posted')
-#                ->htmlTemplate('emails/comment_notification.html.twig')
-#                ->from()
-                ->to('kyosuke.suizenji@google.com')
-#                ->context(['comment' => $comment])
-        );
-
         return new Response($this->twig->render('conference/index.html.twig', [
             'conferences' => $conferenceRepository->findAll(),
         ]));
