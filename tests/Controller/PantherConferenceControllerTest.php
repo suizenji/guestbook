@@ -10,11 +10,11 @@ class PantherConferenceControllerTest extends PantherTestCase
     {
         // $_SERVER['PANTHER_NO_HEADLESS'] = true;
 
-        $baseUri = substr($_SERVER['SYMFONY_PROJECT_DEFAULT_ROUTE_URL'], 0, -1);
+#        $baseUri = substr($_SERVER['SYMFONY_PROJECT_DEFAULT_ROUTE_URL'], 0, -1);
 
         $client = static::createPantherClient([
             'panther_no_headless' => true,
-            'external_base_uri' => $baseUri,
+#            'external_base_uri' => $baseUri,
             'browser' => PantherTestCase::FIREFOX,
         ], [], [
             'capabilities' => ['acceptInsecureCerts' => true],
