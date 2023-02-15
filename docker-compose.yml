@@ -24,7 +24,7 @@ services:
     ports:
       - '9000:9000'
     volumes:
-      - .:/var/www/symfony_docker
+      - .:/var/www/symfony
     depends_on:
       - database
 ###< php ###
