@@ -16,6 +16,19 @@ services:
       - ./var/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
+###> php ###
+  php:
+    container_name: php
+    build:
+      context: .
+    ports:
+      - '9000:9000'
+    volumes:
+      - .:/var/www/symfony_docker
+    depends_on:
+      - database
+###< php ###
+
 ###> symfony/mailer ###
   mailer:
     image: schickling/mailcatcher
