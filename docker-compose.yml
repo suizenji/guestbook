@@ -30,6 +30,7 @@ services:
       - .:/var/www/app
     depends_on:
       - database
+    entrypoint: symfony serve
 ###< php ###
 
 ###> symfony/mailer ###
