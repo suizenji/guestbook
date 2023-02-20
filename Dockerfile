@@ -12,6 +12,10 @@ RUN apt update \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
+RUN apt install -y npm \
+    && npm install --global n && n install lts && apt remove -y nodejs npm \
+    && apt -y autoremove
+
 WORKDIR /var/www/app
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
