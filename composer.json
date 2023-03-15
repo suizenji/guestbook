@@ -84,6 +84,8 @@
     },
     "scripts": {
         "auto-scripts": {
+            "mkdir -p public/uploads/photos": "script",
+            "chmod -R 733 public/uploads": "script",
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
